@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Movie from "../components/Movie";
+import styles from "./Home.module.css";
 function CoinTracker() {
   const [loading, setLoading] = useState(true);
   const [coins, setCoins] = useState([]);
@@ -66,11 +67,11 @@ function MovieShower() {
     fetchMovie();
   }, []);
   return (
-    <div>
+    <div className={styles.container}>
       {loading ? (
         <h1>Loading now... </h1>
       ) : (
-        <div>
+        <div className={styles.movies}>
           {movies.map((movie) => (
             <Movie
               key={movie.id}
