@@ -1,56 +1,7 @@
 import { useEffect, useState } from "react";
 import Movie from "../components/Movie";
 import styles from "./Home.module.css";
-function CoinTracker() {
-  const [loading, setLoading] = useState(true);
-  const [coins, setCoins] = useState([]);
-  const [cash, setCash] = useState(0);
-  const [coin, setCoin] = useState(0);
-  const [exchange_value, setExchange_value] = useState(0);
-  useEffect(() => {
-    fetch("https://api.coinpaprika.com/v1/tickers")
-      .then((response) => response.json())
-      .then((json) => {
-        setCoins(json);
-        setLoading(false);
-      });
-  }, []);
-  const setSelectedCoin = (event) => {
-    setCoin(event.target.value);
-  };
-  const putCash = (event) => {
-    setCash(event.target.value);
-  };
-  const clickExchange = (event) => {
-    event.preventDefault();
-    setExchange_value(cash / coin);
-  };
-  return (
-    <div>
-      <h1>coin tracker {loading ? null : `(${coins.length})`}</h1>
-      {loading ? (
-        <strong>Loading...</strong>
-      ) : (
-        <div>
-          <select onChange={setSelectedCoin}>
-            {coins.map((coin) => (
-              <option value={coin.quotes.USD.price} key={coin.id}>
-                {coin.name}({coin.symbol}):${coin.quotes.USD.price}
-              </option>
-            ))}
-          </select>
-          <input
-            onChange={putCash}
-            value={cash}
-            placeholder="put your USD"
-          ></input>
-          <button onClick={clickExchange}>exchange</button>
-          <h1>you can get {exchange_value}</h1>
-        </div>
-      )}
-    </div>
-  );
-}
+import { CoinTracker } from "./Coin";
 
 function MovieShower() {
   const [loading, setLoading] = useState(true);
@@ -89,17 +40,16 @@ function MovieShower() {
 }
 
 function Home() {
-  const [coin, setcoin] = useState(0);
-  const coinclick = () => {
-    setcoin(coin ? 0 : 1);
+  const [theme, setTheme] = useState(1);
+  const changeTheme = () => {
+    setTheme(theme ? 0 : 1);
   };
   return (
     <div>
       <div>
-        <button onClick={coinclick}>coin</button>
-        {coin ? <CoinTracker /> : null}
+        <button onClick={changeTheme}>{theme ? "coin" : "movie"}</button>
+        {theme ? <MovieShower /> : <CoinTracker />}
       </div>
-      <div>{<MovieShower />}</div>
     </div>
   );
 }
